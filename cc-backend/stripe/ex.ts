@@ -1,0 +1,1 @@
+// this is just a placeholder file to make sure the `stripe` directory is treated as a module. this will be replaced with actual Stripe-related code in the future.
