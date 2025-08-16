@@ -81,6 +81,25 @@ export const productVariants = pgTable('productVariants', {
     productId: integer('product_id').notNull().references(() => products.id, {onDelete: 'cascade'}),
 })
 
+/* -------------------- Inventory -------------------- */
+export const inventory = pgTable('inventory', {
+    id: serial('id').primaryKey(),
+    productVariantId: integer('product_variant_id').notNull().references(() => productVariants.id, {onDelete: 'cascade'}),
+    locationId: integer('location_id').notNull().references(() => location.id, {onDelete: 'cascade'}),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    quantity: integer('quantity').notNull().default(0),
+})
+
+/* -------------------- Location -------------------- */
+export const location = pgTable('locations', {
+    id: serial('id').primaryKey(),
+    storeName: integer('store_number').notNull().unique(),
+    storeAddress: jsonb('store_address').notNull().unique(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
 /* -------------------- Relations -------------------- */
 export const usersRelations = relations(users, ({ one, many }) => ({
     customer: one(customers, {
@@ -121,4 +140,11 @@ export const productVariantsRelations = relations(productVariants, ({ one }) => 
 
 export const productsRelations = relations(products, ({ many }) => ({
     variants: many(productVariants),
+}));
+
+export const locationsRelations = relations(location, ({ one }) => ({
+    inventory: one(inventory, {
+        fields: [location.id],
+        references: [inventory.locationId]
+    })
 }));
