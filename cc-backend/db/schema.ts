@@ -11,7 +11,7 @@ export const productCategoryEnum = pgEnum('product_categories', ['PRODUCE', 'MEA
 /* -------------------- Users -------------------- */
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
-    customerId: integer('customer_id').unique().references(() => customers.id, {onDelete: 'cascade'}),
+    customerId: integer('customer_id').notNull().unique().references(() => customers.id, {onDelete: 'cascade'}),
     email: text('email').notNull().unique(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
@@ -32,7 +32,7 @@ export const customers = pgTable('customers', {
 /* -------------------- Orders -------------------- */
 export const orders = pgTable('orders', {
     id: serial('id').primaryKey(),
-    customerId: integer('customer_id').notNull().references(() => customers.id, {onDelete: 'cascade'}),
+    customerId: integer('customer_id').unique().notNull().references(() => customers.id, {onDelete: 'cascade'}),
     status: orderStatusEnum().notNull(),
     totalPrice: numeric('total_price', { precision: 10, scale: 2 }).notNull(),
     deliveryAddress: jsonb('delivery_address'),
@@ -42,10 +42,21 @@ export const orders = pgTable('orders', {
     orderType: orderTypeEnum().notNull()
 });
 
+/* -------------------- OrderItems -------------------- */
+export const orderItems = pgTable('order_items', {
+    id: serial('id').primaryKey(),
+    orderId: integer('order_id').references(() => orders.id, {onDelete: 'cascade'}),
+    productVariantId: integer('product_variant_id').unique().notNull().references(() => productVariants.id, {onDelete: 'cascade'}),
+    quantity: integer('quantity').notNull(),
+    unitPrice: numeric('unit_price', { precision: 10, scale: 2 }).notNull(),
+    discount: numeric('discount', { precision: 10, scale: 2 })
+})
+
+
 /* -------------------- Addresses -------------------- */
 export const addresses = pgTable('addresses', {
     id: serial('id').primaryKey(),
-    userId: integer('user_id').notNull().references(() => users.id, {onDelete: 'cascade'}),
+    userId: integer('user_id').unique().notNull().references(() => users.id, {onDelete: 'cascade'}),
     streetAddress: text('street_address').notNull(),
     city: text('city').notNull(),
     state: text('state').notNull(),
@@ -146,5 +157,27 @@ export const locationsRelations = relations(location, ({ one }) => ({
     inventory: one(inventory, {
         fields: [location.id],
         references: [inventory.locationId]
+    })
+}));
+
+export const inventoryRelations = relations(inventory, ({ one }) => ({
+    productVariant: one(productVariants, {
+        fields: [inventory.productVariantId],
+        references: [productVariants.id]
+    }),
+    location: one(location, {
+        fields: [inventory.locationId],
+        references: [location.id]
+    })
+}))
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+    order: one(orders, {
+        fields: [orderItems.orderId],
+        references: [orders.id]
+    }),
+    productVariant: one(productVariants, {
+        fields: [orderItems.productVariantId],
+        references: [productVariants.id]
     })
 }));
