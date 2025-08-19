@@ -1,0 +1,1 @@
+ALTER TYPE "public"."discounts" RENAME TO "discount_types";
