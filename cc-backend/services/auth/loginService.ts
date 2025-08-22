@@ -1,9 +1,9 @@
 import { request } from 'express'
 import { supabase } from '../../clients/supabase'
+import { logInfo, logError } from '../../utils/logger'
 
-export const initiateLogin = async (req = request) => {
-    // TODO: add logger here
-    console.log("entered initiateLogin");
+export const initLogin = async (req = request) => {
+    logInfo("entered initLogin");
 
     try {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -11,12 +11,21 @@ export const initiateLogin = async (req = request) => {
             password: req.body.password
         });
 
-        if (error) {
-            throw new Error(error.message);
-        }
+        if (error) throw new Error(`${error.message}`);
 
-        return data;
+        return mapLoginResponse(data);
     } catch (error) {
-        throw new Error('Login attempt to supabase failed');
+        logError(`initLogin error: ${error.message}`);
+        throw new Error(`initLogin error: ${error.message}`);
     }
+}
+
+const mapLoginResponse = (data) => {
+    return {
+        id: data.user.id,
+        email: data.user.email,
+        accessToken: data.session.access_token,
+        refreshToken: data.session.refresh_token,
+        expiresIn: data.session.expires_in
+    };
 }
