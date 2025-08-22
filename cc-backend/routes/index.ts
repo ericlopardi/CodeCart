@@ -2,7 +2,9 @@
 // Future route definitions will be added here.
 
 import { Router } from 'express';
+import { handleLogin } from '../controllers/auth/loginController';
 
 const router = Router();
+router.post('/v1/login', handleLogin);
 
 export default router;
