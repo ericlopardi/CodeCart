@@ -13,9 +13,10 @@ export const handleLogin = async (req = request, res = response): Promise<Respon
     logInfo("entered handleLogin");
     let validation = userSchema.safeParse(req.body);
     if (!validation.success) {
-      return res.status(STATUS_CODE.HTTP_BAD_REQUEST).json({
-          error: validation.error.message
-      });
+        const message = validation.error.issues.map(issue => issue.message).join(', ');
+        return res.status(STATUS_CODE.HTTP_BAD_REQUEST).json({
+            error: `Validation failed: ${message}`
+        });
     }
     try {
       const loginResult = await initLogin(req);
