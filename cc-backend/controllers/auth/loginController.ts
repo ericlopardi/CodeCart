@@ -2,7 +2,7 @@ import { request, Response, response } from 'express';
 import { z } from 'zod';
 import { PASSWORD_REGEX, STATUS_CODE } from '../../utils/constants';
 import { initLogin } from '../../services/auth/loginService';
-import { logInfo, logError } from '../../utils/logger';
+import { logInfo } from '../../utils/logger';
 
 const userSchema = z.object({
     email: z.email(),
