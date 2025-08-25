@@ -32,8 +32,8 @@ export const initRegister = async (req: Request) => {
 
 const createCustomerRecordTx = async (req: Request, tx) => {
     const [customer] = await tx.insert(customers).values({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstName: req.body.firstName.toUpperCase(),
+        lastName: req.body.lastName.toUpperCase(),
         phoneNumber: req.body.phoneNumber,
         email: req.body.email
     }).returning({ id: customers.id });

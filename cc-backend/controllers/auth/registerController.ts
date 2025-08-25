@@ -15,8 +15,8 @@ import { initRegister } from '../../services/auth/registerService';
 const registerSchema = z.object({
     email: z.email(),
     password: z.string().min(MIN_PASSWORD_LENGTH).regex(PASSWORD_REGEX),
-    firstName: z.string().min(MIN_NAME_LENGTH).max(MAX_NAME_LENGTH).transform(name => name.toUpperCase()), // normalize data in DB
-    lastName: z.string().min(MIN_NAME_LENGTH).max(MAX_NAME_LENGTH).transform(name => name.toUpperCase()), // normalize data in DB
+    firstName: z.string().min(MIN_NAME_LENGTH).max(MAX_NAME_LENGTH),
+    lastName: z.string().min(MIN_NAME_LENGTH).max(MAX_NAME_LENGTH),
     phoneNumber: z.string().min(MIN_PHONE_NUMBER_LENGTH).max(MAX_PHONE_NUMBER_LENGTH).regex(PHONE_NUMBER_REGEX).optional()
 })
 
