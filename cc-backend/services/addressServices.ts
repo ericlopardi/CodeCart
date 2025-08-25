@@ -75,20 +75,18 @@ export const initUpdateAddress = async (addressId, updateData, userId) => {
     logInfo("entered updateAddressService");
     
     try {
-        // If setting this address as default, first unset other defaults
         if (updateData.isDefault) {
             const { error: updateError } = await supabase
                 .from('addresses')
                 .update({ isDefault: false })
                 .eq('userId', userId)
-                .neq('id', addressId); // Don't update the current address
+                .neq('id', addressId);
             
             if (updateError) {
                 throw new Error(`Failed to update other default addresses: ${updateError.message}`);
             }
         }
 
-        // Update the specific address (only if it belongs to the user)
         const { data: updatedAddress, error } = await supabase
             .from('addresses')
             .update({
@@ -96,7 +94,7 @@ export const initUpdateAddress = async (addressId, updateData, userId) => {
                 updatedAt: new Date().toISOString()
             })
             .eq('id', addressId)
-            .eq('userId', userId) // Ensures user can only update their own addresses
+            .eq('userId', userId)
             .select()
             .single();
 
@@ -117,12 +115,11 @@ export const initDeleteAddress = async (addressId, userId) => {
     logInfo("entered deleteAddressService");
     
     try {
-        // Delete the address (only if it belongs to the user)
         const { data: deletedAddress, error } = await supabase
             .from('addresses')
             .delete()
             .eq('id', addressId)
-            .eq('userId', userId) // Ensures user can only delete their own addresses
+            .eq('userId', userId) 
             .select()
             .single();
 
