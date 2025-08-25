@@ -1,5 +1,6 @@
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,}$/
 export const PHONE_NUMBER_REGEX = /^\+?[1-9]\d{1,14}$/
+export const BIRTH_DATE_REGEX = /^\d{8}$/
 export const MIN_PASSWORD_LENGTH = 8
 export const MIN_NAME_LENGTH = 2
 export const MAX_NAME_LENGTH = 100
