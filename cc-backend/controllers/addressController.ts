@@ -64,10 +64,8 @@ export const handleGetAddresses = async (req: Request, res: Response) => {
     logInfo("entered handleGetAddresses");
     
     try {
-        // Get userId from auth middleware (guaranteed to exist since route is protected)
         const userId = req.user.id;
         
-        // Call service layer to get all addresses for user
         const addresses = await initGetAddress(userId);
         
         return res.status(STATUS_CODE.HTTP_OK).json({
@@ -89,7 +87,6 @@ export const handleUpdateAddress = async (req: Request, res: Response) => {
     logInfo("entered handleUpdateAddress");
     
     try {
-        // Get address ID from URL parameter
         const addressId = req.params.id;
         if (!addressId) {
             return res.status(STATUS_CODE.HTTP_BAD_REQUEST).json({
@@ -97,7 +94,6 @@ export const handleUpdateAddress = async (req: Request, res: Response) => {
             });
         }
 
-        // Validate input using UpdateAddressSchema
         const validation = UpdateAddressSchema.safeParse(req.body);
         if (!validation.success) {
             const message = validation.error.issues.map(issue => issue.message).join(', ');
@@ -106,11 +102,9 @@ export const handleUpdateAddress = async (req: Request, res: Response) => {
             });
         }
 
-        // Get userId from auth middleware
         const userId = req.user.id;
 
-        // Call service layer to update address
-        const updatedAddress = await updateAddressService(addressId, validation.data, userId);
+        const updatedAddress = await initUpdateAddress(addressId, validation.data, userId);
         
         if (!updatedAddress) {
             return res.status(STATUS_CODE.HTTP_NOT_FOUND).json({
@@ -136,7 +130,6 @@ export const handleDeleteAddress = async (req: Request, res: Response) => {
     logInfo("entered handleDeleteAddress");
     
     try {
-        // Get address ID from URL parameter
         const addressId = req.params.id;
         if (!addressId) {
             return res.status(STATUS_CODE.HTTP_BAD_REQUEST).json({
@@ -144,11 +137,9 @@ export const handleDeleteAddress = async (req: Request, res: Response) => {
             });
         }
 
-        // Get userId from auth middleware
         const userId = req.user.id;
 
-        // Call service layer to delete address
-        const deletedAddress = await deleteAddressService(addressId, userId);
+        const deletedAddress = await initDeleteAddress(addressId, userId);
         
         if (!deletedAddress) {
             return res.status(STATUS_CODE.HTTP_NOT_FOUND).json({

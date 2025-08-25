@@ -13,9 +13,9 @@ router.use('/v1/protected', authenticateToken);
 
 // PROTECTED ROUTES
 router.post('/v1/addresses', handleCreateAddress);
-router.get('/v1/addresses:', handleGetAddresses);
-router.patch('/v1/addresses/:id', handleUpdateAddress);
-router.delete('/v1/addresses/:id', handleDeleteAddress);
+// router.get('/v1/addresses:', handleGetAddresses);
+// router.patch('/v1/addresses/:id', handleUpdateAddress);
+// router.delete('/v1/addresses/:id', handleDeleteAddress);
 
 router.get('/v1/protected/example', (req, res) => {
     res.json({ message: 'This is a protected route', user: req.user });

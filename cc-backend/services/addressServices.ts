@@ -9,7 +9,7 @@ export const initCreateAddress = async (addressData, userId) => {
     try {
         if (addressData.isDefault) {
             const { error: updateError } = await supabase
-                .from('addresses')
+                .from('addresses')``
                 .update({ isDefault: false })
                 .eq('userId', userId);
             
@@ -48,15 +48,14 @@ export const initCreateAddress = async (addressData, userId) => {
 };
 
 export const initGetAddress = async (userId) => {
-    logInfo("entered getAddressesService");
+    logInfo("entered initGetAddress");
     
     try {
-        // Get all addresses for the user using Supabase
         const { data: addresses, error } = await supabase
             .from('addresses')
             .select('*')
             .eq('userId', userId)
-            .order('createdAt', { ascending: false }); // Most recent first
+            .order('createdAt', { ascending: false });
         
         if (error) {
             throw new Error(`Failed to fetch addresses: ${error.message}`);
@@ -72,7 +71,7 @@ export const initGetAddress = async (userId) => {
 };
 
 export const initUpdateAddress = async (addressId, updateData, userId) => {
-    logInfo("entered updateAddressService");
+    logInfo("entered initUpdateAddress");
     
     try {
         if (updateData.isDefault) {
@@ -112,7 +111,7 @@ export const initUpdateAddress = async (addressId, updateData, userId) => {
 };
 
 export const initDeleteAddress = async (addressId, userId) => {
-    logInfo("entered deleteAddressService");
+    logInfo("entered initDeleteAddress");
     
     try {
         const { data: deletedAddress, error } = await supabase
