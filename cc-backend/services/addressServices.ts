@@ -3,13 +3,13 @@ import { addresses } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { logInfo, logError } from '../utils/logger';
 
-export const initCreateAddress = async (addressData, userId) => {
+export const initCreateAddresses = async (addressData, userId) => {
     logInfo("entered initCreateAddress");
     
     try {
         if (addressData.isDefault) {
             const { error: updateError } = await supabase
-                .from('addresses')``
+                .from('addresses')
                 .update({ isDefault: false })
                 .eq('userId', userId);
             
@@ -27,9 +27,7 @@ export const initCreateAddress = async (addressData, userId) => {
                 state: addressData.state,
                 zipCode: addressData.zipCode,
                 country: addressData.country,
-                isDefault: addressData.isDefault || false,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                isDefault: addressData.isDefault || false
             })
             .select()
             .single();
@@ -47,7 +45,7 @@ export const initCreateAddress = async (addressData, userId) => {
     }
 };
 
-export const initGetAddress = async (userId) => {
+export const initGetAddresses = async (userId) => {
     logInfo("entered initGetAddress");
     
     try {
@@ -70,7 +68,7 @@ export const initGetAddress = async (userId) => {
     }
 };
 
-export const initUpdateAddress = async (addressId, updateData, userId) => {
+export const initUpdateAddresses = async (addressId, updateData, userId) => {
     logInfo("entered initUpdateAddress");
     
     try {
@@ -110,7 +108,7 @@ export const initUpdateAddress = async (addressId, updateData, userId) => {
     }
 };
 
-export const initDeleteAddress = async (addressId, userId) => {
+export const initDeleteAddresses = async (addressId, userId) => {
     logInfo("entered initDeleteAddress");
     
     try {
@@ -134,4 +132,3 @@ export const initDeleteAddress = async (addressId, userId) => {
         throw new Error('Failed to delete address');
     }
 };
-

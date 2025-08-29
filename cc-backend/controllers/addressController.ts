@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { initCreateAddress, initGetAddress, initUpdateAddress, initDeleteAddress} from '../services/addressServices';
+import { initCreateAddresses, initGetAddresses, initUpdateAddresses, initDeleteAddresses} from '../services/addressServices';
 import { addresses } from '../db/schema';
 import { STATE_REGEX, ZIPCODE_REGEX, COUNTRY_REGEX, STATUS_CODE}  from '../utils/constants';
 import { logInfo, logError} from '../utils/logger';
@@ -36,15 +36,8 @@ export const handleCreateAddress = async (req: Request, res: Response) => {
 
     try {
         const userId = req.user.id;
-        
-        // addressServices is called - sends data 
-        const newAddress = await initCreateAddress(validation.data, userId);
+        const newAddress = await initCreateAddresses(validation.data, userId);
 
-        if (!newAddress) {
-            return res.status(STATUS_CODE.HTTP_INTERNAL_SERVER_ERROR).json({
-                error: 'Server error: Failed to create address'
-            });
-        }
         return res.status(STATUS_CODE.HTTP_CREATED).json({
             message: 'Address created successfully',
             address: newAddress
@@ -53,7 +46,7 @@ export const handleCreateAddress = async (req: Request, res: Response) => {
     } catch (error) {
         logError(`Error creating address: ${error.message}`);
         return res.status(STATUS_CODE.HTTP_INTERNAL_SERVER_ERROR).json({
-            error: 'Internal server error'
+            error: `Internal server error: ${error.message}`
         });
     }
 };
@@ -65,7 +58,7 @@ export const handleGetAddresses = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
         
-        const addresses = await initGetAddress(userId);
+        const addresses = await initGetAddresses(userId);
         
         return res.status(STATUS_CODE.HTTP_OK).json({
             message: 'Addresses retrieved successfully',
@@ -76,7 +69,7 @@ export const handleGetAddresses = async (req: Request, res: Response) => {
     } catch (error) {
         logError(`Error getting addresses: ${error.message}`);
         return res.status(STATUS_CODE.HTTP_INTERNAL_SERVER_ERROR).json({
-            error: 'Internal server error'
+            error: `Internal server error: ${error.message}`
         });
     }
 };
@@ -103,11 +96,11 @@ export const handleUpdateAddress = async (req: Request, res: Response) => {
 
         const userId = req.user.id;
 
-        const updatedAddress = await initUpdateAddress(addressId, validation.data, userId);
+        const updatedAddress = await initUpdateAddresses(addressId, validation.data, userId);
         
         if (!updatedAddress) {
             return res.status(STATUS_CODE.HTTP_NOT_FOUND).json({
-                error: 'Address not found or access denied'
+                error: 'Address not found'
             });
         }
 
@@ -138,7 +131,7 @@ export const handleDeleteAddress = async (req: Request, res: Response) => {
 
         const userId = req.user.id;
 
-        const deletedAddress = await initDeleteAddress(addressId, userId);
+        const deletedAddress = await initDeleteAddresses(addressId, userId);
         
         if (!deletedAddress) {
             return res.status(STATUS_CODE.HTTP_NOT_FOUND).json({
