@@ -39,11 +39,10 @@ export const handleCreateAddress = async (req: Request, res: Response) => {
         
         // addressServices is called - sends data 
         const newAddress = await initCreateAddress(validation.data, userId);
-        
 
         if (!newAddress) {
-            return res.status(STATUS_CODE.HTTP_BAD_REQUEST).json({
-                error: 'Failed to create address'
+            return res.status(STATUS_CODE.HTTP_INTERNAL_SERVER_ERROR).json({
+                error: 'Server error: Failed to create address'
             });
         }
         return res.status(STATUS_CODE.HTTP_CREATED).json({
