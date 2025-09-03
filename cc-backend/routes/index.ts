@@ -1,10 +1,8 @@
-// This file is intentionally left empty as a placeholder to ensure the `routes` directory is treated as a module.
-// Future route definitions will be added here.
-
 import { Router } from 'express';
 import { handleLogin } from '../controllers/auth/loginController';
 import { authenticateToken } from '../middleware/authMiddleware';
 import { handleRegister } from '../controllers/auth/registerController';
+import { handleCreateAddress, handleGetAddresses, handleUpdateAddress, handleDeleteAddress } from '../controllers/addressController';
 
 const router = Router();
 
@@ -16,9 +14,19 @@ router.post('/v1/register', handleRegister);
 router.use('/v1/protected', authenticateToken);
 
 // PROTECTED ROUTES
+router.post('/v1/addresses', handleCreateAddress);
+router.get('/v1/addresses', handleGetAddresses);
+router.patch('/v1/addresses/:id', handleUpdateAddress);
+router.delete('/v1/addresses/:id', handleDeleteAddress);
+
 router.get('/v1/protected/example', (req, res) => {
     res.json({ message: 'This is a protected route', user: req.user });
 });
+
+router.post('/v1/addresses', handleCreateAddress);
+router.get('/v1/addresses:', handleGetAddresses);
+router.patch('/v1/addresses/:id', handleUpdateAddress);
+router.delete('/v1/addresses/:id', handleDeleteAddress);
 
 export default router;
 
