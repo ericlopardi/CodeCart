@@ -100,88 +100,93 @@ async function seedDatabase() {
     
     const realGroceryProducts = [
       // PRODUCE
-      { name: 'Organic Bananas', brand: 'Fresh Farms', category: 'PRODUCE', price: '2.99', description: 'Fresh organic bananas, perfect for snacking or smoothies' },
-      { name: 'Gala Apples', brand: 'Orchard Fresh', category: 'PRODUCE', price: '3.49', description: 'Crisp and sweet Gala apples, great for lunch boxes' },
-      { name: 'Baby Spinach', brand: 'Green Valley', category: 'PRODUCE', price: '4.99', description: 'Fresh baby spinach leaves, pre-washed and ready to eat' },
-      { name: 'Roma Tomatoes', brand: 'Garden Select', category: 'PRODUCE', price: '2.79', description: 'Fresh Roma tomatoes, perfect for cooking and salads' },
-      { name: 'Organic Carrots', brand: 'Nature\'s Best', category: 'PRODUCE', price: '2.49', description: 'Organic carrots, sweet and crunchy' },
-      { name: 'Red Bell Peppers', brand: 'Fresh Farms', category: 'PRODUCE', price: '4.99', description: 'Sweet red bell peppers, great for cooking or raw snacking' },
-      { name: 'Russet Potatoes', brand: 'Farm Fresh', category: 'PRODUCE', price: '3.99', description: '5lb bag of russet potatoes, perfect for baking or mashing' },
-      { name: 'Avocados', brand: 'Premium Select', category: 'PRODUCE', price: '1.99', description: 'Ripe avocados, perfect for guacamole or toast' },
+      { name: 'Organic Bananas', brand: 'Fresh Farms', category: 'PRODUCE', price: '2.99', description: 'Fresh organic bananas, perfect for snacking or smoothies', ageRestricted: false },
+      { name: 'Gala Apples', brand: 'Orchard Fresh', category: 'PRODUCE', price: '3.49', description: 'Crisp and sweet Gala apples, great for lunch boxes', ageRestricted: false },
+      { name: 'Baby Spinach', brand: 'Green Valley', category: 'PRODUCE', price: '4.99', description: 'Fresh baby spinach leaves, pre-washed and ready to eat', ageRestricted: false },
+      { name: 'Roma Tomatoes', brand: 'Garden Select', category: 'PRODUCE', price: '2.79', description: 'Fresh Roma tomatoes, perfect for cooking and salads', ageRestricted: false },
+      { name: 'Organic Carrots', brand: 'Nature\'s Best', category: 'PRODUCE', price: '2.49', description: 'Organic carrots, sweet and crunchy', ageRestricted: false },
+      { name: 'Red Bell Peppers', brand: 'Fresh Farms', category: 'PRODUCE', price: '4.99', description: 'Sweet red bell peppers, great for cooking or raw snacking', ageRestricted: false },
+      { name: 'Russet Potatoes', brand: 'Farm Fresh', category: 'PRODUCE', price: '3.99', description: 'Russet potatoes, perfect for baking or mashing', ageRestricted: false },
+      { name: 'Avocados', brand: 'Premium Select', category: 'PRODUCE', price: '1.99', description: 'Ripe avocados, perfect for guacamole or toast', ageRestricted: false },
 
       // MEAT
-      { name: 'Ground Beef 80/20', brand: 'Premium Butcher', category: 'MEAT', price: '6.99', description: 'Fresh ground beef, 80% lean, perfect for burgers and tacos' },
-      { name: 'Boneless Chicken Breast', brand: 'Farm Fresh Poultry', category: 'MEAT', price: '8.99', description: 'Fresh boneless, skinless chicken breast' },
-      { name: 'Pork Tenderloin', brand: 'Heritage Farms', category: 'MEAT', price: '12.99', description: 'Tender pork tenderloin, great for roasting' },
-      { name: 'Turkey Slices', brand: 'Deli Fresh', category: 'MEAT', price: '7.49', description: 'Sliced turkey breast, perfect for sandwiches' },
-      { name: 'Bacon', brand: 'Smokehouse', category: 'MEAT', price: '5.99', description: 'Thick-cut bacon, perfect for breakfast' },
+      { name: 'Ground Beef 80/20', brand: 'Premium Butcher', category: 'MEAT', price: '6.99', description: 'Fresh ground beef, 80% lean, perfect for burgers and tacos', ageRestricted: false },
+      { name: 'Boneless Chicken Breast', brand: 'Farm Fresh Poultry', category: 'MEAT', price: '8.99', description: 'Fresh boneless, skinless chicken breast', ageRestricted: false },
+      { name: 'Pork Tenderloin', brand: 'Heritage Farms', category: 'MEAT', price: '12.99', description: 'Tender pork tenderloin, great for roasting', ageRestricted: false },
+      { name: 'Turkey Slices', brand: 'Deli Fresh', category: 'MEAT', price: '7.49', description: 'Sliced turkey breast, perfect for sandwiches', ageRestricted: false },
+      { name: 'Bacon', brand: 'Smokehouse', category: 'MEAT', price: '5.99', description: 'Thick-cut bacon, perfect for breakfast', ageRestricted: false },
 
       // SEAFOOD
-      { name: 'Atlantic Salmon Fillet', brand: 'Ocean Fresh', category: 'SEAFOOD', price: '14.99', description: 'Fresh Atlantic salmon fillet, rich in omega-3' },
-      { name: 'Large Shrimp', brand: 'Coastal Catch', category: 'SEAFOOD', price: '12.99', description: 'Fresh large shrimp, peeled and deveined' },
-      { name: 'Cod Fillet', brand: 'Deep Sea', category: 'SEAFOOD', price: '11.99', description: 'Fresh cod fillet, mild and flaky' },
+      { name: 'Atlantic Salmon Fillet', brand: 'Ocean Fresh', category: 'SEAFOOD', price: '14.99', description: 'Fresh Atlantic salmon fillet, rich in omega-3', ageRestricted: false },
+      { name: 'Large Shrimp', brand: 'Coastal Catch', category: 'SEAFOOD', price: '12.99', description: 'Fresh large shrimp, peeled and deveined', ageRestricted: false },
+      { name: 'Cod Fillet', brand: 'Deep Sea', category: 'SEAFOOD', price: '11.99', description: 'Fresh cod fillet, mild and flaky', ageRestricted: false },
 
       // BAKERY
-      { name: 'Sourdough Bread', brand: 'Artisan Bakery', category: 'BAKERY', price: '3.99', description: 'Fresh baked sourdough bread loaf' },
-      { name: 'Chocolate Croissants', brand: 'French Baker', category: 'BAKERY', price: '4.49', description: 'Buttery croissants filled with chocolate' },
-      { name: 'Bagels - Everything', brand: 'NY Style', category: 'BAKERY', price: '2.99', description: 'Fresh everything bagels, pack of 6' },
-      { name: 'Dinner Rolls', brand: 'Home Style', category: 'BAKERY', price: '2.49', description: 'Soft dinner rolls, pack of 8' },
+      { name: 'Sourdough Bread', brand: 'Artisan Bakery', category: 'BAKERY', price: '3.99', description: 'Fresh baked sourdough bread loaf', ageRestricted: false },
+      { name: 'Chocolate Croissants', brand: 'French Baker', category: 'BAKERY', price: '4.49', description: 'Buttery croissants filled with chocolate', ageRestricted: false },
+      { name: 'Bagels - Everything', brand: 'NY Style', category: 'BAKERY', price: '2.99', description: 'Fresh everything bagels', ageRestricted: false },
+      { name: 'Dinner Rolls', brand: 'Home Style', category: 'BAKERY', price: '2.49', description: 'Soft dinner rolls', ageRestricted: false },
 
       // DAIRY
-      { name: 'Whole Milk', brand: 'Dairy Fresh', category: 'DAIRY', price: '3.49', description: 'Fresh whole milk, 1 gallon' },
-      { name: 'Greek Yogurt', brand: 'Mountain High', category: 'DAIRY', price: '5.99', description: 'Plain Greek yogurt, high in protein' },
-      { name: 'Cheddar Cheese', brand: 'Aged Select', category: 'DAIRY', price: '4.99', description: 'Sharp cheddar cheese, 8oz block' },
-      { name: 'Butter', brand: 'Creamery Gold', category: 'DAIRY', price: '4.49', description: 'Unsalted butter, 1lb package' },
-      { name: 'Eggs', brand: 'Farm Fresh', category: 'DAIRY', price: '2.99', description: 'Large grade A eggs, dozen' },
-      { name: 'Cream Cheese', brand: 'Philadelphia', category: 'DAIRY', price: '2.49', description: 'Original cream cheese, 8oz package' },
+      { name: 'Whole Milk', brand: 'Dairy Fresh', category: 'DAIRY', price: '3.49', description: 'Fresh whole milk', ageRestricted: false },
+      { name: 'Greek Yogurt', brand: 'Mountain High', category: 'DAIRY', price: '5.99', description: 'Plain Greek yogurt, high in protein', ageRestricted: false },
+      { name: 'Cheddar Cheese', brand: 'Aged Select', category: 'DAIRY', price: '4.99', description: 'Sharp cheddar cheese', ageRestricted: false },
+      { name: 'Butter', brand: 'Creamery Gold', category: 'DAIRY', price: '4.49', description: 'Unsalted butter', ageRestricted: false },
+      { name: 'Eggs', brand: 'Farm Fresh', category: 'DAIRY', price: '2.99', description: 'Large grade A eggs', ageRestricted: false },
+      { name: 'Cream Cheese', brand: 'Philadelphia', category: 'DAIRY', price: '2.49', description: 'Original cream cheese', ageRestricted: false },
 
       // DELI
-      { name: 'Ham Slices', brand: 'Deli Premium', category: 'DELI', price: '6.99', description: 'Honey ham slices, perfect for sandwiches' },
-      { name: 'Swiss Cheese', brand: 'Imported Select', category: 'DELI', price: '7.49', description: 'Swiss cheese slices, imported quality' },
-      { name: 'Roast Beef', brand: 'Deli Choice', category: 'DELI', price: '8.99', description: 'Lean roast beef slices, freshly cut' },
+      { name: 'Ham Slices', brand: 'Deli Premium', category: 'DELI', price: '6.99', description: 'Honey ham slices, perfect for sandwiches', ageRestricted: false },
+      { name: 'Swiss Cheese', brand: 'Imported Select', category: 'DELI', price: '7.49', description: 'Swiss cheese slices, imported quality', ageRestricted: false },
+      { name: 'Roast Beef', brand: 'Deli Choice', category: 'DELI', price: '8.99', description: 'Lean roast beef slices, freshly cut', ageRestricted: false },
 
       // PANTRY
-      { name: 'Pasta - Spaghetti', brand: 'Barilla', category: 'PANTRY', price: '1.99', description: 'Premium spaghetti pasta, 1lb box' },
-      { name: 'Rice - Jasmine', brand: 'Royal', category: 'PANTRY', price: '4.99', description: 'Fragrant jasmine rice, 2lb bag' },
-      { name: 'Olive Oil', brand: 'Mediterranean Gold', category: 'PANTRY', price: '8.99', description: 'Extra virgin olive oil, 500ml bottle' },
-      { name: 'Canned Tomatoes', brand: 'Hunt\'s', category: 'PANTRY', price: '1.49', description: 'Diced tomatoes, 14.5oz can' },
-      { name: 'Black Beans', brand: 'Bush\'s', category: 'PANTRY', price: '1.29', description: 'Black beans, 15oz can' },
-      { name: 'Peanut Butter', brand: 'Jif', category: 'PANTRY', price: '3.99', description: 'Creamy peanut butter, 18oz jar' },
-      { name: 'Cereal - Cheerios', brand: 'General Mills', category: 'PANTRY', price: '4.49', description: 'Original Cheerios cereal, family size' },
-      { name: 'Granola Bars', brand: 'Nature Valley', category: 'PANTRY', price: '3.99', description: 'Crunchy granola bars, variety pack' },
+      { name: 'Pasta - Spaghetti', brand: 'Barilla', category: 'PANTRY', price: '1.99', description: 'Premium spaghetti pasta', ageRestricted: false },
+      { name: 'Rice - Jasmine', brand: 'Royal', category: 'PANTRY', price: '4.99', description: 'Fragrant jasmine rice', ageRestricted: false },
+      { name: 'Olive Oil', brand: 'Mediterranean Gold', category: 'PANTRY', price: '8.99', description: 'Extra virgin olive oil', ageRestricted: false },
+      { name: 'Canned Tomatoes', brand: 'Hunt\'s', category: 'PANTRY', price: '1.49', description: 'Diced tomatoes', ageRestricted: false },
+      { name: 'Black Beans', brand: 'Bush\'s', category: 'PANTRY', price: '1.29', description: 'Black beans', ageRestricted: false },
+      { name: 'Peanut Butter', brand: 'Jif', category: 'PANTRY', price: '3.99', description: 'Creamy peanut butter', ageRestricted: false },
+      { name: 'Cereal - Cheerios', brand: 'General Mills', category: 'PANTRY', price: '4.49', description: 'Original Cheerios cereal', ageRestricted: false },
+      { name: 'Granola Bars', brand: 'Nature Valley', category: 'PANTRY', price: '3.99', description: 'Crunchy granola bars, variety pack', ageRestricted: false },
 
       // FROZEN
-      { name: 'Frozen Pizza', brand: 'DiGiorno', category: 'FROZEN', price: '5.99', description: 'Four cheese rising crust pizza' },
-      { name: 'Ice Cream - Vanilla', brand: 'Häagen-Dazs', category: 'FROZEN', price: '6.99', description: 'Premium vanilla ice cream, pint' },
-      { name: 'Frozen Berries', brand: 'Cascadian Farm', category: 'FROZEN', price: '4.99', description: 'Organic mixed berries, 10oz bag' },
-      { name: 'Frozen Vegetables', brand: 'Green Giant', category: 'FROZEN', price: '2.99', description: 'Mixed vegetables, steam-in-bag' },
-      { name: 'Waffles', brand: 'Eggo', category: 'FROZEN', price: '3.49', description: 'Homestyle waffles, 10 count' },
+      { name: 'Frozen Pizza', brand: 'DiGiorno', category: 'FROZEN', price: '5.99', description: 'Four cheese rising crust pizza', ageRestricted: false },
+      { name: 'Ice Cream - Vanilla', brand: 'Häagen-Dazs', category: 'FROZEN', price: '6.99', description: 'Premium vanilla ice cream', ageRestricted: false },
+      { name: 'Frozen Berries', brand: 'Cascadian Farm', category: 'FROZEN', price: '4.99', description: 'Organic mixed berries', ageRestricted: false },
+      { name: 'Frozen Vegetables', brand: 'Green Giant', category: 'FROZEN', price: '2.99', description: 'Mixed vegetables, steam-in-bag', ageRestricted: false },
+      { name: 'Waffles', brand: 'Eggo', category: 'FROZEN', price: '3.49', description: 'Homestyle waffles', ageRestricted: false },
 
-      // BEVERAGES
-      { name: 'Orange Juice', brand: 'Tropicana', category: 'BEVERAGES', price: '4.49', description: 'Pure premium orange juice, 59oz carton' },
-      { name: 'Coffee - Ground', brand: 'Folgers', category: 'BEVERAGES', price: '6.99', description: 'Classic roast ground coffee, 30.5oz container' },
-      { name: 'Sparkling Water', brand: 'La Croix', category: 'BEVERAGES', price: '4.99', description: 'Lime flavored sparkling water, 12-pack' },
-      { name: 'Green Tea', brand: 'Lipton', category: 'BEVERAGES', price: '3.49', description: 'Green tea bags, 20 count' },
-      { name: 'Apple Juice', brand: 'Mott\'s', category: 'BEVERAGES', price: '3.99', description: '100% apple juice, 64oz bottle' },
+      // BEVERAGES (Some age-restricted items added)
+      { name: 'Orange Juice', brand: 'Tropicana', category: 'BEVERAGES', price: '4.49', description: 'Pure premium orange juice', ageRestricted: false },
+      { name: 'Coffee - Ground', brand: 'Folgers', category: 'BEVERAGES', price: '6.99', description: 'Classic roast ground coffee', ageRestricted: false },
+      { name: 'Sparkling Water', brand: 'La Croix', category: 'BEVERAGES', price: '4.99', description: 'Lime flavored sparkling water', ageRestricted: false },
+      { name: 'Green Tea', brand: 'Lipton', category: 'BEVERAGES', price: '3.49', description: 'Green tea bags', ageRestricted: false },
+      { name: 'Apple Juice', brand: 'Mott\'s', category: 'BEVERAGES', price: '3.99', description: '100% apple juice', ageRestricted: false },
+      { name: 'Beer', brand: 'Bud Light', category: 'BEVERAGES', price: '9.99', description: 'Bud Light Beer', ageRestricted: true },
+      { name: 'Red Wine', brand: 'Kendall-Jackson', category: 'BEVERAGES', price: '18.99', description: 'Vintner\'s Reserve Cabernet Sauvignon', ageRestricted: true },
+      { name: 'Vodka', brand: 'Grey Goose', category: 'BEVERAGES', price: '45.99', description: 'Premium vodka', ageRestricted: true },
 
       // HOME_ESSENTIALS
-      { name: 'Paper Towels', brand: 'Bounty', category: 'HOME_ESSENTIALS', price: '12.99', description: 'Select-a-size paper towels, 8 rolls' },
-      { name: 'Toilet Paper', brand: 'Charmin', category: 'HOME_ESSENTIALS', price: '15.99', description: 'Ultra soft toilet paper, 12 mega rolls' },
-      { name: 'Dish Soap', brand: 'Dawn', category: 'HOME_ESSENTIALS', price: '2.99', description: 'Original dish soap, 19.4oz bottle' },
-      { name: 'Laundry Detergent', brand: 'Tide', category: 'HOME_ESSENTIALS', price: '11.99', description: 'Original scent detergent, 64 loads' },
-      { name: 'Trash Bags', brand: 'Glad', category: 'HOME_ESSENTIALS', price: '8.99', description: 'ForceFlex drawstring bags, 13 gallon, 80 count' },
+      { name: 'Paper Towels', brand: 'Bounty', category: 'HOME_ESSENTIALS', price: '12.99', description: 'Select-a-size paper towels', ageRestricted: false },
+      { name: 'Toilet Paper', brand: 'Charmin', category: 'HOME_ESSENTIALS', price: '15.99', description: 'Ultra soft toilet paper', ageRestricted: false },
+      { name: 'Dish Soap', brand: 'Dawn', category: 'HOME_ESSENTIALS', price: '2.99', description: 'Original dish soap', ageRestricted: false },
+      { name: 'Laundry Detergent', brand: 'Tide', category: 'HOME_ESSENTIALS', price: '11.99', description: 'Original scent detergent', ageRestricted: false },
+      { name: 'Trash Bags', brand: 'Glad', category: 'HOME_ESSENTIALS', price: '8.99', description: 'ForceFlex drawstring bags', ageRestricted: false },
 
-      // HEALTH_AND_BEAUTY
-      { name: 'Toothpaste', brand: 'Colgate', category: 'HEALTH_AND_BEAUTY', price: '3.49', description: 'Total whitening toothpaste, 4.8oz tube' },
-      { name: 'Shampoo', brand: 'Pantene', category: 'HEALTH_AND_BEAUTY', price: '5.99', description: 'Pro-V daily moisture shampoo, 12.6oz' },
-      { name: 'Body Wash', brand: 'Dove', category: 'HEALTH_AND_BEAUTY', price: '4.99', description: 'Moisturizing body wash, 22oz bottle' },
-      { name: 'Deodorant', brand: 'Secret', category: 'HEALTH_AND_BEAUTY', price: '3.99', description: 'Invisible solid antiperspirant, 2.6oz' },
+      // HEALTH_AND_BEAUTY (Some age-restricted items added)
+      { name: 'Toothpaste', brand: 'Colgate', category: 'HEALTH_AND_BEAUTY', price: '3.49', description: 'Total whitening toothpaste', ageRestricted: false },
+      { name: 'Shampoo', brand: 'Pantene', category: 'HEALTH_AND_BEAUTY', price: '5.99', description: 'Pro-V daily moisture shampoo', ageRestricted: false },
+      { name: 'Body Wash', brand: 'Dove', category: 'HEALTH_AND_BEAUTY', price: '4.99', description: 'Moisturizing body wash', ageRestricted: false },
+      { name: 'Deodorant', brand: 'Secret', category: 'HEALTH_AND_BEAUTY', price: '3.99', description: 'Invisible solid antiperspirant', ageRestricted: false },
+      { name: 'Nicotine Gum', brand: 'Nicorette', category: 'HEALTH_AND_BEAUTY', price: '24.99', description: 'Nicotine gum', ageRestricted: true },
+      { name: 'Pain Relief', brand: 'Advil', category: 'HEALTH_AND_BEAUTY', price: '8.99', description: 'Ibuprofen tablets', ageRestricted: false },
 
       // BABY
-      { name: 'Baby Food - Bananas', brand: 'Gerber', category: 'BABY', price: '1.29', description: '1st foods bananas, 2.5oz jar' },
-      { name: 'Diapers', brand: 'Pampers', category: 'BABY', price: '24.99', description: 'Baby dry diapers, size 3, 174 count' },
-      { name: 'Baby Wipes', brand: 'Huggies', category: 'BABY', price: '4.99', description: 'Natural care baby wipes, 56 count' },
-      { name: 'Baby Formula', brand: 'Similac', category: 'BABY', price: '29.99', description: 'Advance infant formula, 23.2oz container' },
+      { name: 'Baby Food - Bananas', brand: 'Gerber', category: 'BABY', price: '1.29', description: '1st foods bananas', ageRestricted: false },
+      { name: 'Diapers', brand: 'Pampers', category: 'BABY', price: '24.99', description: 'Baby dry diapers', ageRestricted: false },
+      { name: 'Baby Wipes', brand: 'Huggies', category: 'BABY', price: '4.99', description: 'Natural care baby wipes', ageRestricted: false },
+      { name: 'Baby Formula', brand: 'Similac', category: 'BABY', price: '29.99', description: 'Advance infant formula', ageRestricted: false },
     ];
 
     for (const productData of realGroceryProducts) {
@@ -191,6 +196,7 @@ async function seedDatabase() {
         category: productData.category as any,
         unitPrice: productData.price,
         brand: productData.brand,
+        ageRestricted: productData.ageRestricted,
       }).returning({ id: products.id });
       productIds.push(product.id);
     }

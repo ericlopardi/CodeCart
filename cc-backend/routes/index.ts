@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { handleLogin } from '../controllers/auth/loginController';
 import { authenticateToken } from '../middleware/authMiddleware';
+import { handleRegister } from '../controllers/auth/registerController';
 import { handleCreateAddress, handleGetAddresses, handleUpdateAddress, handleDeleteAddress } from '../controllers/addressController';
-
 
 const router = Router();
 
 // PUBLIC ROUTES
 router.post('/v1/login', handleLogin);
+router.post('/v1/register', handleRegister);
 
 // APPLY AUTH MIDDLEWARE TO PROTECTED ROUTES BELOW
 router.use('/v1/protected', authenticateToken);
