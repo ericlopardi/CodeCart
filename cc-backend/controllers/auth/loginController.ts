@@ -1,12 +1,12 @@
 import { request, Response, response } from 'express';
 import { z } from 'zod';
-import { PASSWORD_REGEX, STATUS_CODE } from '../../utils/constants';
+import { PASSWORD_REGEX, STATUS_CODE, MIN_PASSWORD_LENGTH } from '../../utils/constants';
 import { initLogin } from '../../services/auth/loginService';
 import { logInfo } from '../../utils/logger';
 
 const userSchema = z.object({
     email: z.email(),
-    password: z.string().min(8).regex(PASSWORD_REGEX)
+    password: z.string().min(MIN_PASSWORD_LENGTH).regex(PASSWORD_REGEX)
   });
 
 export const handleLogin = async (req = request, res = response): Promise<Response> => {

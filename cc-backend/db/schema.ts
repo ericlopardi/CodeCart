@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, serial, text, timestamp, boolean, integer, numeric, jsonb, uuid, unique } from 'drizzle-orm/pg-core';
+import { pgTable, pgEnum, serial, text, timestamp, boolean, integer, numeric, jsonb, uuid, unique, date } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 /* -------------------- Enumerations -------------------- */
@@ -24,8 +24,8 @@ export const customers = pgTable('customers', {
     phoneNumber: text('phone_number'),
     email: text('email').notNull().unique(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(), 
-});
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+ });
 
 /* -------------------- Users -------------------- */
 export const users = pgTable('users', {
@@ -35,6 +35,8 @@ export const users = pgTable('users', {
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     isActive: boolean('is_active').default(true),
+    sbAuthId: text('sb_auth_id').notNull().unique(),
+    birthDate: date('birth_date')
 });
 
 /* -------------------- Orders -------------------- */
@@ -84,6 +86,7 @@ export const products = pgTable('products', {
     brand: text('brand').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    ageRestricted: boolean('age_restricted').notNull().default(false)
 });
 
 /* -------------------- ProductVariants -------------------- */

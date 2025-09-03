@@ -16,11 +16,11 @@ export const initLogin = async (req = request) => {
         return mapLoginResponse(data);
     } catch (error) {
         logError(`initLogin error: ${error.message}`);
-        throw new Error(`initLogin error: ${error.message}`);
+        throw new Error(`Login failed`);
     }
 }
 
-const mapLoginResponse = (data) => {
+export const mapLoginResponse = (data) => {
     return {
         id: data.user.id,
         email: data.user.email,
