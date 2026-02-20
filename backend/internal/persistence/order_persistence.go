@@ -13,22 +13,20 @@ import (
 
 type OrderPersistence struct {
 	DbHandle *sql.DB
-	Logger   *zap.Logger
 }
 
-func NewOrderPersistence(dbHandle *sql.DB, logger *zap.Logger) OrderPersistence {
+func NewOrderPersistence(dbHandle *sql.DB) OrderPersistence {
 	return OrderPersistence{
 		DbHandle: dbHandle,
-		Logger:   logger,
 	}
 }
 
 func (op OrderPersistence) PersistCreateOrder(ctx context.Context, orderDomain model.Order) error {
-	zLog := op.getZLog(ctx)
+	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered PersistCreateOrder")
 
 	query := `
-		INSERT INTO orders (customer_id, status, total_price, delivery_address, created_at, updated_at, address_id, "orderType")
+		INSERT INTO orders (customer_id, status, total_price, delivery_address, created_at, updated_at, address_id, orderType)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 	`
 
@@ -45,7 +43,7 @@ func (op OrderPersistence) PersistCreateOrder(ctx context.Context, orderDomain m
 		orderDomain.OrderType,
 	)
 	if err != nil {
-		zLog.Error("ExecContext failed: %w", zap.Error(err))
+		zLog.Error("ExecContext failed", zap.Error(err))
 		return err
 	}
 
@@ -53,7 +51,7 @@ func (op OrderPersistence) PersistCreateOrder(ctx context.Context, orderDomain m
 }
 
 func (op OrderPersistence) FetchAllOrders(ctx context.Context) (*sql.Rows, error) {
-	zLog := op.getZLog(ctx)
+	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered FetchAllOrders")
 
 	query := `
@@ -70,7 +68,7 @@ func (op OrderPersistence) FetchAllOrders(ctx context.Context) (*sql.Rows, error
 }
 
 func (op OrderPersistence) FetchOrderById(ctx context.Context, id int) *sql.Row {
-	zLog := op.getZLog(ctx)
+	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered FetchOrderById")
 
 	query := `
@@ -79,12 +77,11 @@ func (op OrderPersistence) FetchOrderById(ctx context.Context, id int) *sql.Row 
 		WHERE id = $1
 	`
 
-	row := op.DbHandle.QueryRowContext(ctx, query, id)
-	return row
+	return op.DbHandle.QueryRowContext(ctx, query, id)
 }
 
 func (op OrderPersistence) PersistUpdateOrderById(ctx context.Context, id int, updates map[string]any) error {
-	zLog := op.getZLog(ctx)
+	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered PersistUpdateOrderById")
 
 	allowedFields := map[string]bool{
@@ -126,8 +123,4 @@ func (op OrderPersistence) PersistUpdateOrderById(ctx context.Context, id int, u
 		return err
 	}
 	return nil
-}
-
-func (op OrderPersistence) getZLog(ctx context.Context) *zap.Logger {
-	return utils.FromContext(ctx, op.Logger)
 }
