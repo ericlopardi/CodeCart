@@ -94,7 +94,7 @@ func SetupRoutes(mux *http.ServeMux, resourceConfig ResourceConfig) {
 	orderItemHandler := handler.NewOrderItemHandler(orderItemService)
 
 	mux.HandleFunc("POST /api/v1/orders/{orderId}/item", orderItemHandler.HandleCreateOrderItem)
-	mux.HandleFunc("GET /api/v1/orders/{orderId}/item/{id}", orderItemHandler.HandleFetchOrderItemById)
+	mux.HandleFunc("GET /api/v1/orders/{orderId}/items", orderItemHandler.HandleGetAllOrderItems)
 	mux.HandleFunc("PATCH /api/v1/orders/{orderId}/item/{id}", orderItemHandler.HandleUpdateOrderItemById)
 	mux.HandleFunc("DELETE /api/v1/orders/{orderId}/item/{id}", orderItemHandler.HandleDeleteOrderItemById)
 

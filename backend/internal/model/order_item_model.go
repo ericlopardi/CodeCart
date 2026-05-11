@@ -10,8 +10,7 @@ type OrderItem struct {
 }
 
 type CreateOrderItemRequest struct {
-	// OrderId being commented out due to it being passed down through the URL
-	// OrderId          int     `json:"order_id" validate:"required"`
+	OrderId          int     `json:"order_id" validate:"required"`
 	ProductVariantId int     `json:"product_variant_id" validate:"required"`
 	Quantity         int     `json:"quantity" validate:"required"`
 	UnitPrice        float64 `json:"unit_price" validate:"required"`

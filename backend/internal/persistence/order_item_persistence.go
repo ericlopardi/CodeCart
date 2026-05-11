@@ -45,49 +45,26 @@ func (oip OrderItemPersistence) PersistCreateItemOrder(ctx context.Context, orde
 	return nil
 }
 
-func (oip OrderItemPersistence) FetchAllOrderItemsByOrderId(ctx context.Context, orderId, page, pageSize int) (*sql.Rows, int64, error) {
+func (oip OrderItemPersistence) FetchAllOrderItemsByOrderId(ctx context.Context, orderId int) (*sql.Rows, error) {
 	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered FetchAllOrderItemsByOrderId")
-
-	var total int64
-	countQuery := "SELECT COUNT(*) FROM order_items WHERE order_id = $1"
-	if err := oip.DbHandle.QueryRowContext(ctx, countQuery, orderId).Scan(&total); err != nil {
-		zLog.Error("QueryRowContext failed on the pagination count query", zap.Error(err))
-		return nil, 0, err
-	}
-
-	offset := (page - 1) * pageSize
 
 	query := `
 		SELECT id, order_id, product_variant_id, quantity, unit_price, discount
 		FROM order_items
 		WHERE order_id = $1
 		ORDER BY id ASC
-		LIMIT $2 OFFSET $3
 	`
 
-	rows, err := oip.DbHandle.QueryContext(ctx, query, orderId, pageSize, offset)
+	rows, err := oip.DbHandle.QueryContext(ctx, query, orderId)
 	if err != nil {
 		zLog.Error("QueryContext failed", zap.Error(err))
-		return nil, 0, err
+		return nil, err
 	}
-	return rows, total, nil
+	return rows, nil
 }
 
-func (oip OrderItemPersistence) PersistFetchOrderItemsByID(ctx context.Context, orderId int, id int) *sql.Row {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("Entered PersistFetchOrderItemsByID")
-
-	query := `
-		SELECT id, order_id, product_variant_id, quantity, unit_price, discount
-		FROM order_items
-		WHERE order_id = $1 AND id = $2
-	`
-
-	return oip.DbHandle.QueryRowContext(ctx, query, orderId, id)
-}
-
-func (oip OrderItemPersistence) PersistUpdateOrderItemsById(ctx context.Context, orderId int, id int, updates map[string]any) error {
+func (oip OrderItemPersistence) PersistUpdateOrderItemById(ctx context.Context, orderId int, id int, updates map[string]any) error {
 	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered PersistUpdateOrderItemsById")
 
@@ -131,7 +108,7 @@ func (oip OrderItemPersistence) PersistUpdateOrderItemsById(ctx context.Context,
 	return nil
 }
 
-func (oip OrderItemPersistence) PersistDeleteOrderItemsById(ctx context.Context, orderId int, id int) error {
+func (oip OrderItemPersistence) PersistDeleteOrderItemById(ctx context.Context, orderId int, id int) error {
 	zLog := utils.FromContext(ctx, zap.NewNop())
 	zLog.Debug("Entered PersistDeleteOrderItemsById")
 

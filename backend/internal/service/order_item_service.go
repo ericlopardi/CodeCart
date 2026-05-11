@@ -20,9 +20,9 @@ func NewOrderItemService(orderItemPersistence persistence.OrderItemPersistence) 
 	}
 }
 
-func (ois OrderItemService) CreateOrderItems(ctx context.Context, request model.CreateOrderItemRequest, orderId int) error {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("entered CreateOrderItems")
+func (ois OrderItemService) CreateOrderItem(ctx context.Context, request model.CreateOrderItemRequest, orderId int) error {
+	z := utils.FromContext(ctx, zap.NewNop())
+	z.Debug("entered CreateOrderItems")
 
 	orderItemDomainModel := model.OrderItem{
 		OrderId:          orderId,
@@ -33,21 +33,21 @@ func (ois OrderItemService) CreateOrderItems(ctx context.Context, request model.
 	}
 
 	if err := ois.OrderItemPersistence.PersistCreateItemOrder(ctx, orderItemDomainModel); err != nil {
-		zLog.Error("persistence invocation failed", zap.Error(err))
+		z.Error("persistence invocation failed", zap.Error(err))
 		return err
 	}
 
 	return nil
 }
 
-func (ois OrderItemService) GetAllOrderItems(ctx context.Context, orderId, page, pageSize int) ([]model.OrderItem, int64, error) {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("entered GetAllOrderItems")
+func (ois OrderItemService) GetAllOrderItems(ctx context.Context, orderId int) ([]model.OrderItem, error) {
+	z := utils.FromContext(ctx, zap.NewNop())
+	z.Debug("entered GetAllOrderItems")
 
-	rows, total, err := ois.OrderItemPersistence.FetchAllOrderItemsByOrderId(ctx, orderId, page, pageSize)
+	rows, err := ois.OrderItemPersistence.FetchAllOrderItemsByOrderId(ctx, orderId)
 	if err != nil {
-		zLog.Error("persistence invocation failed", zap.Error(err))
-		return nil, 0, err
+		z.Error("persistence invocation failed", zap.Error(err))
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -63,45 +63,23 @@ func (ois OrderItemService) GetAllOrderItems(ctx context.Context, orderId, page,
 			&item.UnitPrice,
 			&item.Discount,
 		); err != nil {
-			zLog.Error("scan operation failed", zap.Error(err))
-			return nil, 0, err
+			z.Error("scan operation failed", zap.Error(err))
+			return nil, err
 		}
 		items = append(items, item)
 	}
 
 	if err := rows.Err(); err != nil {
-		zLog.Error("error occurred while iterating through sql rows", zap.Error(err))
-		return nil, 0, err
+		z.Error("error occurred while iterating through sql rows", zap.Error(err))
+		return nil, err
 	}
 
-	return items, total, nil
+	return items, nil
 }
 
-func (ois OrderItemService) FetchOrderItemsById(ctx context.Context, orderId int, id int) (model.OrderItem, error) {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("entered FetchOrderItemsById")
-
-	row := ois.OrderItemPersistence.PersistFetchOrderItemsByID(ctx, orderId, id)
-
-	var item model.OrderItem
-	if err := row.Scan(
-		&item.Id,
-		&item.OrderId,
-		&item.ProductVariantId,
-		&item.Quantity,
-		&item.UnitPrice,
-		&item.Discount,
-	); err != nil {
-		zLog.Error("scan operation failed", zap.Error(err))
-		return model.OrderItem{}, err
-	}
-
-	return item, nil
-}
-
-func (ois OrderItemService) UpdateOrderItemsById(ctx context.Context, request model.UpdateOrderItemRequest, orderId int, id int) error {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("entered UpdateOrderItemsById")
+func (ois OrderItemService) UpdateOrderItemById(ctx context.Context, request model.UpdateOrderItemRequest, orderId int, id int) error {
+	z := utils.FromContext(ctx, zap.NewNop())
+	z.Debug("entered UpdateOrderItemsById")
 
 	updates := make(map[string]any)
 
@@ -119,24 +97,24 @@ func (ois OrderItemService) UpdateOrderItemsById(ctx context.Context, request mo
 	}
 
 	if len(updates) == 0 {
-		zLog.Error("no updates found", zap.Int("order_item_id", id))
+		z.Error("no updates found", zap.Int("order_item_id", id))
 		return fmt.Errorf("no updates found")
 	}
 
-	if err := ois.OrderItemPersistence.PersistUpdateOrderItemsById(ctx, orderId, id, updates); err != nil {
-		zLog.Error("persistence invocation failed", zap.Error(err))
+	if err := ois.OrderItemPersistence.PersistUpdateOrderItemById(ctx, orderId, id, updates); err != nil {
+		z.Error("persistence invocation failed", zap.Error(err))
 		return err
 	}
 
 	return nil
 }
 
-func (ois OrderItemService) DeleteOrderItemsById(ctx context.Context, orderId int, id int) error {
-	zLog := utils.FromContext(ctx, zap.NewNop())
-	zLog.Debug("entered DeleteOrderItemsById")
+func (ois OrderItemService) DeleteOrderItemById(ctx context.Context, orderId int, id int) error {
+	z := utils.FromContext(ctx, zap.NewNop())
+	z.Debug("entered DeleteOrderItemsById")
 
-	if err := ois.OrderItemPersistence.PersistDeleteOrderItemsById(ctx, orderId, id); err != nil {
-		zLog.Error("persistence invocation failed", zap.Error(err))
+	if err := ois.OrderItemPersistence.PersistDeleteOrderItemById(ctx, orderId, id); err != nil {
+		z.Error("persistence invocation failed", zap.Error(err))
 		return err
 	}
 
