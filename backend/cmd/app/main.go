@@ -1,0 +1,140 @@
+package main
+
+import (
+	"context"
+	"database/sql"
+	"flag"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
+	firebase "firebase.google.com/go/v4"
+	firebaseauth "firebase.google.com/go/v4/auth"
+	"github.com/joho/godotenv"
+	"github.com/jshelley8117/CodeCart/internal/middleware"
+	"github.com/jshelley8117/CodeCart/internal/resource"
+	"github.com/jshelley8117/CodeCart/internal/utils"
+	_ "github.com/lib/pq"
+	"go.uber.org/zap"
+	"golang.org/x/oauth2"
+	"google.golang.org/api/impersonate"
+	"google.golang.org/api/option"
+)
+
+const EXIT_STATUS = 1
+
+type ResourceConfig struct {
+	GCloudDB     *sql.DB
+	Logger       *zap.Logger
+	TokenSource  oauth2.TokenSource
+	FirebaseAuth *firebaseauth.Client
+}
+
+func main() {
+	dbMode := flag.String("db", "", "Database mode: 'gcp' or 'local'")
+	flag.Parse()
+
+	if *dbMode == "" {
+		log.Fatal("Error: -db flag is required. Use '-db=gcp' or '-db=local' when spinning up the server")
+	}
+
+	if err := godotenv.Load("./.env"); err != nil {
+		log.Fatal("Error: cannot load env vars")
+	}
+
+	logger, err := utils.NewLogger(utils.Config{Env: os.Getenv("ENV")})
+	if err != nil {
+		log.Fatal("Error: cannot instantiate logger")
+	}
+
+	var (
+		dbHandle   *sql.DB
+		reusableTS oauth2.TokenSource
+		fbApp      *firebase.App
+	)
+	ctx := context.Background()
+
+	switch *dbMode {
+	case "local":
+		logger.Debug("Attempting to connect to local PostgreSQL database")
+		dbHandle, err = resource.NewPostgreSqlDb()
+		if err != nil {
+			logger.Error("Failed to establish connection to local PostgreSQL DB", zap.Error(err))
+			os.Exit(EXIT_STATUS)
+		}
+		fbApp, err = firebase.NewApp(ctx, &firebase.Config{
+			ProjectID: os.Getenv("GCP_PROJECT_ID"),
+		})
+		if err != nil {
+			logger.Error("Failed to initialize firebase application")
+			os.Exit(EXIT_STATUS)
+		}
+	case "gcp":
+		logger.Debug("Attempting to connect to Google Cloud Platform SQL DB")
+		targetSA := os.Getenv("GCP_IMP_SA")
+		if targetSA == "" {
+			logger.Error("GCP_IMP_SA is not set")
+			os.Exit(EXIT_STATUS)
+		}
+
+		ts, err := impersonate.CredentialsTokenSource(ctx, impersonate.CredentialsConfig{
+			TargetPrincipal: targetSA,
+			Scopes:          []string{"https://www.googleapis.com/auth/cloud-platform"},
+		})
+		if err != nil {
+			logger.Error("failed to create impersonated token source: %v", zap.Error(err))
+			os.Exit(EXIT_STATUS)
+		}
+
+		tok, err := ts.Token()
+		if err != nil {
+			logger.Error("failed to mint impersonated token: %v", zap.Error(err))
+			os.Exit(EXIT_STATUS)
+		}
+
+		logger.Debug("impersonation OK; token expires at %s (in ~%s)", zap.String("expiry", tok.Expiry.Format(time.RFC3339)), zap.String("duration", time.Until(tok.Expiry).Round(time.Second).String()))
+
+		reusableTS = oauth2.ReuseTokenSource(tok, ts)
+
+		dbHandle, err = resource.NewGCloudDB(reusableTS)
+		if err != nil {
+			logger.Error("could not connect to db: %v", zap.Error(err))
+			os.Exit(EXIT_STATUS)
+		}
+
+		fbApp, err = firebase.NewApp(ctx, &firebase.Config{
+			ProjectID: os.Getenv("GCP_PROJECT_ID"),
+		}, option.WithTokenSource(reusableTS))
+	default:
+		logger.Error("invalid db mode provided", zap.String("mode", *dbMode))
+		os.Exit(EXIT_STATUS)
+	}
+
+	fbAuthClient, err := fbApp.Auth(ctx)
+	if err != nil {
+		logger.Error("Failed to get firebase auth client", zap.Error(err))
+		os.Exit(EXIT_STATUS)
+	}
+
+	logger.Debug("db connection established")
+
+	mux := http.NewServeMux()
+	SetupRoutes(mux, ResourceConfig{
+		GCloudDB:     dbHandle,
+		Logger:       logger,
+		TokenSource:  reusableTS,
+		FirebaseAuth: fbAuthClient,
+	})
+
+	handler := middleware.Recoverer(logger)(middleware.RequestLogger(logger)(mux))
+
+	server := http.Server{
+		Addr:    ":8081",
+		Handler: handler,
+	}
+	logger.Debug("go server initiating", zap.String("addr", server.Addr))
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		logger.Error("error starting server", zap.Error(err))
+	}
+}
